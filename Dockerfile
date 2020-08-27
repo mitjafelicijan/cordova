@@ -2,18 +2,18 @@ FROM ubuntu:focal
 
 LABEL maintainer="Mitja Felicijan <mitja.felicijan@gmail.com>"
 
-# update an essential software
+# install an essential software
 
-RUN apt update \
-    && apt install -y make curl gcc build-essential ca-certificates curl wget gnupg libatomic1 --no-install-recommends
+RUN apt update && \
+    apt install -y make curl gcc build-essential ca-certificates curl wget gnupg libatomic1 less --no-install-recommends
 
 # installing nodejs
 
-RUN apt update \
-    && curl -sL https://deb.nodesource.com/setup_12.x -o nodesource_setup.sh \
-    && bash nodesource_setup.sh \
-    && apt install -y nodejs --no-install-recommends \
-    && npm install -g cordova
+RUN apt update && \
+    curl -sL https://deb.nodesource.com/setup_12.x -o nodesource_setup.sh && \
+    bash nodesource_setup.sh && \
+    apt install -y nodejs --no-install-recommends && \
+    npm install -g cordova
 
 # installing java stuff
 
@@ -49,7 +49,10 @@ RUN mkdir /root/.android && touch /root/.android/repositories.cfg && \
 RUN while true; do echo 'y'; sleep 2; done | sdkmanager --sdk_root=${ANDROID_HOME} "extras;android;m2repository" "extras;google;google_play_services" "extras;google;instantapps" "extras;google;m2repository"
 RUN while true; do echo 'y'; sleep 2; done | sdkmanager --sdk_root=${ANDROID_HOME} "add-ons;addon-google_apis-google-15" "add-ons;addon-google_apis-google-16" "add-ons;addon-google_apis-google-17" "add-ons;addon-google_apis-google-18" "add-ons;addon-google_apis-google-19" "add-ons;addon-google_apis-google-21" "add-ons;addon-google_apis-google-22" "add-ons;addon-google_apis-google-23" "add-ons;addon-google_apis-google-24"
 
-RUN chmod a+x -R $ANDROID_HOME && \
-    chown -R root:root $ANDROID_HOME && \
-    rm -rf /opt/android/licenses && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+#RUN chmod a+x -R $ANDROID_HOME && \
+#    chown -R root:root $ANDROID_HOME && \
+#    rm -rf /opt/android/licenses && \
+#    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+WORKDIR /app
+COPY readme.md /app/readme.md
